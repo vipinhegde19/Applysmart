@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from app.database import engine,Base
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import jobs
-from app.routes import jobs, auth          # add auth here
+from app.routes import jobs, auth
+import os
 
 
 app=FastAPI(
@@ -11,9 +11,18 @@ app=FastAPI(
     version="1.0.0"
 )
 # Add CORS middleware
+allowed_origins = [
+    origin.strip()
+    for origin in os.getenv(
+        "ALLOWED_ORIGINS",
+        "http://localhost:3000,https://applysmart-frontend.onrender.com"
+    ).split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000","https://applysmart-frontend.onrender.com"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

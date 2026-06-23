@@ -40,7 +40,7 @@ def delete_job(job_id:int,db:Session=Depends(get_db),current_user:dict=Depends(g
         raise HTTPException(status_code=404,detail="Job  not found ")
     db.delete(job)
     db.commit()
-    return {"message:"f"Job {job_id} deleted successfully"}
+    return {"message": f"Job {job_id} deleted successfully"}
 
 @router.put("/{job_id}")
 def update_job(job_id:int,job_data:schemas.JobUpdate,db:Session=Depends(get_db),current_user:dict=Depends(get_current_user)):

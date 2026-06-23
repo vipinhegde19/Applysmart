@@ -27,7 +27,6 @@ def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return {"message": "User registered successfully"}
 
 @router.post("/login")
-@router.post("/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     # Find user by email
     db_user = db.query(models.User).filter(models.User.email == form_data.username).first()
