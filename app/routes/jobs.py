@@ -60,7 +60,10 @@ def tailor_job_resume(job_id:int,resume_input:schemas.Resume_Input,db:Session=De
         raise HTTPException(status_code=404,detail="Job not found")
     if not job.job_description:
         raise HTTPException(status_code=400,detail="No job description found for this job")
-    tailored=tailor_resume(job.job_description,resume_input.resume_bullets)
+    try:
+        tailored=tailor_resume(job.job_description,resume_input.resume_bullets)
+    except Exception as error:
+        raise HTTPException(status_code=502, detail=f"AI service error: {error}")
     return {"tailored_resume":tailored}
 
 @router.post("/{job_id}/interview_questions")
@@ -70,5 +73,8 @@ def interview_questions(job_id:int,resume_input:schemas.Resume_Input,db:Session=
         raise HTTPException(status_code=404,detail="job not found")
     if not job.job_description:
         raise HTTPException(status_code=400,detail="No job decription found for this job")
-    Questions=generate_interview_questions(job.job_description,resume_input.resume_bullets)
+    try:
+        Questions=generate_interview_questions(job.job_description,resume_input.resume_bullets)
+    except Exception as error:
+        raise HTTPException(status_code=502, detail=f"AI service error: {error}")
     return {"Interview Questions": Questions}
